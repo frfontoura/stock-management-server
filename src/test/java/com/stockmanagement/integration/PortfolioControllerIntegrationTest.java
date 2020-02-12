@@ -15,7 +15,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class PortfolioControllerIntegrationTest extends AbstractIntegrationTest {
 
-    private final static String BASE_URL = "/api/users/portfolios";
+    private final static String BASE_URL = "/api/users/1/portfolios";
 
     @Order(1)
     @Test

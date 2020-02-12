@@ -2,8 +2,6 @@ package com.stockmanagement.restapi;
 
 import com.stockmanagement.domain.assets.Asset;
 import com.stockmanagement.domain.assets.AssetService;
-import com.stockmanagement.domain.users.User;
-import com.stockmanagement.infra.security.SecurityUtils;
 import com.stockmanagement.restapi.dto.AssetDTO;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -21,10 +19,9 @@ import java.util.stream.Collectors;
  */
 @AllArgsConstructor
 @RestController
-@RequestMapping("/api/users/portfolios/{portfolioId}/assets")
+@RequestMapping("/api/users/{userId}/portfolios/{portfolioId}/assets")
 public class AssetController {
 
-    private final SecurityUtils securityUtils;
     private final AssetService service;
 
     /**
@@ -35,9 +32,8 @@ public class AssetController {
      * @return
      */
     @PostMapping
-    public ResponseEntity<AssetDTO> addAssetToUserPortfolio(@PathVariable final int portfolioId, @Valid @RequestBody final AssetDTO assetDTO) {
-        final User user = securityUtils.getCurrentUser();
-        final Asset asset = service.addAssetToUserPortfolio(user.getId(), portfolioId, assetDTO.toEntity());
+    public ResponseEntity<AssetDTO> addAssetToUserPortfolio(@PathVariable final int userId, @PathVariable final int portfolioId, @Valid @RequestBody final AssetDTO assetDTO) {
+        final Asset asset = service.addAssetToUserPortfolio(userId, portfolioId, assetDTO.toEntity());
         final URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(asset.getId()).toUri();
         return ResponseEntity.created(uri).body(new AssetDTO(asset));
     }
@@ -49,9 +45,8 @@ public class AssetController {
      * @return
      */
     @GetMapping
-    public ResponseEntity<List<AssetDTO>> findByUserPortfolio(@PathVariable final int portfolioId) {
-        final User user = securityUtils.getCurrentUser();
-        final List<Asset> assets = service.findByUserPortfolio(user.getId(), portfolioId);
+    public ResponseEntity<List<AssetDTO>> findByUserPortfolio(@PathVariable final int userId, @PathVariable final int portfolioId) {
+        final List<Asset> assets = service.findByUserPortfolio(userId, portfolioId);
         return ResponseEntity.ok().body(assets.stream().map(asset -> new AssetDTO(asset)).collect(Collectors.toList()));
     }
 
@@ -63,10 +58,9 @@ public class AssetController {
      * @return
      */
     @PutMapping(path = "/{assetId}")
-    public ResponseEntity<AssetDTO> assetSale(@PathVariable final int portfolioId, @PathVariable final int assetId, @Valid @RequestBody final AssetDTO assetDTO) {
-        final User user = securityUtils.getCurrentUser();
+    public ResponseEntity<AssetDTO> assetSale(@PathVariable final int userId, @PathVariable final int portfolioId, @PathVariable final int assetId, @Valid @RequestBody final AssetDTO assetDTO) {
         assetDTO.setId(assetId);
-        final Asset asset = service.assetSale(user.getId(), portfolioId, assetDTO.toEntity());
+        final Asset asset = service.assetSale(userId, portfolioId, assetDTO.toEntity());
 
         if(asset == null) {
             return ResponseEntity.ok().body(null);
