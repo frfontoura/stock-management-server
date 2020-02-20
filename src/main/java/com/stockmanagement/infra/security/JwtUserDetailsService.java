@@ -23,10 +23,7 @@ public class JwtUserDetailsService implements UserDetailsService {
 				.orElseThrow(() -> new UsernameNotFoundException(username));
 
 		return JwtUserDetails.builder()
-                .id(user.getId())
-                .username(user.getUsername())
-                .email(user.getEmail())
-                .password(user.getPassword())
+				.user(user)
                 .authorities(Arrays.asList(new SimpleGrantedAuthority("ROLE_" + user.getRole().name())))
                 .build();
 	}

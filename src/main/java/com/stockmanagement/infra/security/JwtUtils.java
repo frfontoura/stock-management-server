@@ -4,6 +4,7 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import lombok.Getter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -15,8 +16,9 @@ public class JwtUtils {
 	@Value("${jwt.secret}")
 	private String secret;
 
+	@Getter
 	@Value("${jwt.expiration}")
-	private Long expiration;
+	private int expiration;
 
 	public String generateToken(final String username) {
 		return Jwts.builder()

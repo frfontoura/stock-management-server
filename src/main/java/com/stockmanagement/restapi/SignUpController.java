@@ -4,12 +4,15 @@ import com.stockmanagement.domain.users.SignUpService;
 import com.stockmanagement.domain.users.User;
 import com.stockmanagement.restapi.dto.UserDTO;
 import lombok.AllArgsConstructor;
+import lombok.SneakyThrows;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.Valid;
+import java.net.URI;
 
 /**
  * Controller responsible for handing user registration
@@ -29,10 +32,12 @@ public class SignUpController {
      * @param user
      * @return
      */
+    @SneakyThrows
     @PostMapping(path = "/signup")
     public ResponseEntity<UserDTO> signUp(@Valid @RequestBody final UserDTO user) {
         final User newUser = service.signUp(user.toEntity());
-        return ResponseEntity.ok().body(new UserDTO(newUser));
+        final URI uri = ServletUriComponentsBuilder.fromCurrentContextPath().path("/users/me").build().toUri();
+        return ResponseEntity.created(uri).body(new UserDTO(newUser));
     }
 
 }

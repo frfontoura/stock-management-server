@@ -12,6 +12,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Arrays;
 
 public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
 
@@ -29,13 +30,19 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
 	protected void doFilterInternal(final HttpServletRequest request, final HttpServletResponse response, final FilterChain chain)
 			throws IOException, ServletException {
 
-		final String header = request.getHeader("Authorization");
-		if (header != null && header.startsWith("Bearer ")) {
-			final UsernamePasswordAuthenticationToken auth = getAuthentication(header.substring(7));
-			if (auth != null) {
-				SecurityContextHolder.getContext().setAuthentication(auth);
-			}
+		if(request.getCookies() != null) {
+			Arrays.asList(request.getCookies()).stream()
+					.filter(cookie -> cookie.getName().equals("Authorization"))
+					.findFirst()
+					.ifPresent(cookie -> {
+						final String header = cookie.getValue();
+						final UsernamePasswordAuthenticationToken auth = getAuthentication(header);
+						if (auth != null) {
+							SecurityContextHolder.getContext().setAuthentication(auth);
+						}
+					});
 		}
+
 		chain.doFilter(request, response);
 	}
 

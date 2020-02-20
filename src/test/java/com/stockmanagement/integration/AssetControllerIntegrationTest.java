@@ -28,7 +28,7 @@ public class AssetControllerIntegrationTest extends AbstractIntegrationTest {
         final AssetDTO assetDTO = createAsset();
 
         final MvcResult mvcResult = getMockMvc().perform(post(BASE_URL)
-                .header("Authorization", token)
+                .cookie(token)
                 .contentType("application/json")
                 .content(getObjectMapper().writeValueAsString(assetDTO)))
                 .andExpect(status().isCreated())
@@ -43,7 +43,7 @@ public class AssetControllerIntegrationTest extends AbstractIntegrationTest {
     @DisplayName("should list all assets from user's portfolio")
     public void findByUserPortfolioTest() throws Exception{
         final MvcResult mvcResult = getMockMvc().perform(get(BASE_URL)
-                .header("Authorization", token)
+                .cookie(token)
                 .contentType("application/json"))
                 .andExpect(status().isOk())
                 .andReturn();
@@ -60,7 +60,7 @@ public class AssetControllerIntegrationTest extends AbstractIntegrationTest {
         assetDTO.setAmount(15);
 
         final MvcResult mvcResult = getMockMvc().perform(put(BASE_URL + "/1")
-                .header("Authorization", token)
+                .cookie(token)
                 .contentType("application/json")
                 .content(getObjectMapper().writeValueAsString(assetDTO)))
                 .andExpect(status().isOk())
@@ -78,7 +78,7 @@ public class AssetControllerIntegrationTest extends AbstractIntegrationTest {
         assetDTO.setAmount(85);
 
         final MvcResult mvcResult = getMockMvc().perform(put(BASE_URL + "/1")
-                .header("Authorization", token)
+                .cookie(token)
                 .contentType("application/json")
                 .content(getObjectMapper().writeValueAsString(assetDTO)))
                 .andExpect(status().isOk())

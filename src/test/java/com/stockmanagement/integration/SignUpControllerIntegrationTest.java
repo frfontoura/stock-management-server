@@ -24,7 +24,7 @@ public class SignUpControllerIntegrationTest extends AbstractIntegrationTest {
         final MvcResult mvcResult = getMockMvc().perform(post("/signup")
                 .contentType("application/json")
                 .content(getObjectMapper().writeValueAsString(user)))
-                .andExpect(status().isOk())
+                .andExpect(status().isCreated())
                 .andReturn();
 
         final String actual = mvcResult.getResponse().getContentAsString();

@@ -1,5 +1,6 @@
 package com.stockmanagement.infra.security;
 
+import com.stockmanagement.domain.users.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -13,10 +14,7 @@ import java.util.Collection;
 @AllArgsConstructor
 public class JwtUserDetails implements UserDetails {
 
-    private final Integer id;
-    private final String username;
-    private final String email;
-    private final String password;
+    private final User user;
     private Collection<? extends GrantedAuthority> authorities;
 
     @Override
@@ -26,12 +24,12 @@ public class JwtUserDetails implements UserDetails {
 
     @Override
     public String getPassword() {
-        return password;
+        return user.getPassword();
     }
 
     @Override
     public String getUsername() {
-        return username;
+        return user.getUsername();
     }
 
     @Override

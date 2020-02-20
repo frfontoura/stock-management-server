@@ -29,6 +29,7 @@ public class ExceptionHandlerController {
                 .error(e.getMessage())
                 .message(e.getMessage())
                 .path(request.getRequestURI())
+                .showMessage(false)
                 .build();
 
         logger.error(e.getMessage(), e);
@@ -47,6 +48,7 @@ public class ExceptionHandlerController {
                 .error(e.getMessage())
                 .message(e.getMessage())
                 .path(request.getRequestURI())
+                .showMessage(e.isShowMessage())
                 .build();
 
         return ResponseEntity
@@ -68,6 +70,7 @@ public class ExceptionHandlerController {
                 .error("Validation Error")
                 .message(allErrors)
                 .path(request.getRequestURI())
+                .showMessage(true)
                 .build();
 
         return ResponseEntity

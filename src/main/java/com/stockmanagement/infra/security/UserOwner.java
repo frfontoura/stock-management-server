@@ -19,7 +19,7 @@ public class UserOwner {
      * @return
      */
     public boolean isOwner(final Object principal, final int userId) {
-        return ((JwtUserDetails) principal).getId().equals(userId);
+        return ((JwtUserDetails) principal).getUser().getId().equals(userId);
     }
 
 }
