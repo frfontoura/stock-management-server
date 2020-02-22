@@ -20,7 +20,6 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
-import javax.servlet.http.Cookie;
 import javax.sql.DataSource;
 import java.sql.Connection;
 
@@ -38,7 +37,7 @@ public abstract class AbstractIntegrationTest {
 
     private final String EXPECTATIONS_PATH = "expectations/";
     private static boolean liquibaseExecuted = false;
-    protected static Cookie token;
+    protected static String token;
 
     @Getter
     @Autowired
@@ -88,7 +87,7 @@ public abstract class AbstractIntegrationTest {
                 .andExpect(status().isOk())
                 .andReturn();
 
-        token = mvcResult.getResponse().getCookie("Authorization");
+        token = mvcResult.getResponse().getHeader("Authorization");
     }
 
     @SneakyThrows

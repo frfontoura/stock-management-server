@@ -13,7 +13,6 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -30,8 +29,8 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     @Override
     public Authentication attemptAuthentication(final HttpServletRequest req, final HttpServletResponse res) throws AuthenticationException {
         try {
-            final JwtRequest creds = new ObjectMapper().readValue(req.getInputStream(), JwtRequest.class);
-            final UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(creds.getUsername(), creds.getPassword(), new ArrayList<>());
+            final JwtRequest credentials = mapper.readValue(req.getInputStream(), JwtRequest.class);
+            final UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(credentials.getUsername(), credentials.getPassword(), new ArrayList<>());
             final Authentication auth = authenticationManager.authenticate(authToken);
             return auth;
         } catch (final IOException e) {
@@ -62,12 +61,8 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         final JwtUserDetails jwtUser = ((JwtUserDetails) auth.getPrincipal());
         final String username = jwtUser.getUsername();
         final String token = jwtUtil.generateToken(username);
-
-        final Cookie cookie = new Cookie("Authorization", token);
-        cookie.setHttpOnly(true);
-        cookie.setMaxAge(jwtUtil.getExpiration());
-
-        response.addCookie(cookie);
+        response.addHeader("Authorization", "Bearer " + token);
+        response.addHeader("access-control-expose-headers", "Authorization");
 
         final PrintWriter out = response.getWriter();
         response.setContentType("application/json");

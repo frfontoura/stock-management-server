@@ -24,7 +24,7 @@ public class PortfolioControllerIntegrationTest extends AbstractIntegrationTest 
         final Portfolio portfolio = createPortfolio();
 
         final MvcResult mvcResult = getMockMvc().perform(post(BASE_URL)
-                .cookie(token)
+                .header("Authorization", token)
                 .contentType("application/json")
                 .content(getObjectMapper().writeValueAsString(portfolio)))
                 .andExpect(status().isCreated())
@@ -39,7 +39,7 @@ public class PortfolioControllerIntegrationTest extends AbstractIntegrationTest 
     @DisplayName("should find all Portfolio from the User")
     public void findByUserTest() throws Exception {
         final MvcResult mvcResult = getMockMvc().perform(get(BASE_URL)
-                .cookie(token)
+                .header("Authorization", token)
                 .contentType("application/json"))
                 .andExpect(status().isOk())
                 .andReturn();
@@ -60,7 +60,7 @@ public class PortfolioControllerIntegrationTest extends AbstractIntegrationTest 
                 .build();
 
         final MvcResult mvcResult = getMockMvc().perform(put(BASE_URL + "/" + portfolioId)
-                .cookie(token)
+                .header("Authorization", token)
                 .contentType("application/json")
                 .content(getObjectMapper().writeValueAsString(portfolio)))
                 .andExpect(status().isOk())
@@ -77,7 +77,7 @@ public class PortfolioControllerIntegrationTest extends AbstractIntegrationTest 
         final Integer portfolioId = 1;
 
         final MvcResult mvcResult = getMockMvc().perform(get(BASE_URL + "/" + portfolioId)
-                .cookie(token)
+                .header("Authorization", token)
                 .contentType("application/json"))
                 .andExpect(status().isOk())
                 .andReturn();
@@ -93,13 +93,13 @@ public class PortfolioControllerIntegrationTest extends AbstractIntegrationTest 
         final Integer portfolioId = 1;
 
         getMockMvc().perform(delete(BASE_URL + "/" + portfolioId)
-            .cookie(token)
-            .contentType("application/json"))
-            .andExpect(status().isOk())
-            .andReturn();
+                .header("Authorization", token)
+                .contentType("application/json"))
+                .andExpect(status().isOk())
+                .andReturn();
 
         final MvcResult mvcResult = getMockMvc().perform(get(BASE_URL)
-                .cookie(token)
+                .header("Authorization", token)
                 .contentType("application/json"))
                 .andExpect(status().isOk())
                 .andReturn();

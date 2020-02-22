@@ -18,7 +18,7 @@ public class UserControllerIntegrationTest extends AbstractIntegrationTest {
     @DisplayName("should return the logged User")
     void getCurrentUserTest() throws Exception {
         final MvcResult mvcResult = getMockMvc().perform(get("/api/users/me")
-                .cookie(token)
+                .header("Authorization", token)
                 .contentType("application/json"))
                 .andExpect(status().isOk())
                 .andReturn();
