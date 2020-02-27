@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * Represents a grouping of assets, stocks or REITs (Real Estate Investment Trust)
@@ -106,6 +107,24 @@ public class Portfolio {
             }
         }
         return previousAsset;
+    }
+
+    /**
+     * Returns the number of different assets in the portfolio
+     *
+     * @return
+     */
+    public int getAmountOfAssets() {
+        return assets.stream().map(a -> a.getSymbol()).collect(Collectors.toSet()).size();
+    }
+
+    /**
+     * Returns the sum of all assets in the portfolio, based on the value of the last purchase
+     *
+     * @return
+     */
+    public BigDecimal getTotalValueOfPortolio() {
+        return assets.stream().map(a -> a.getLastPriceTotal()).reduce(new BigDecimal(0), (a1, a2) -> a1.add(a2));
     }
 
     private Portfolio() {
