@@ -42,6 +42,7 @@ public class User {
     @Column(name = "role", length = 15, nullable = false)
     private Role role;
 
+    @OrderBy("name")
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private final List<Portfolio> portfolios = new ArrayList<>();
 
